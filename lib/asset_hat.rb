@@ -10,6 +10,12 @@ module AssetHat
   else
     RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless
       defined?(RAILS_ROOT) #:nodoc:
+  end   
+  
+  if defined?(Sinatra)        
+    require 'asset_hat'
+    require 'asset_hat_helper'  
+    require 'asset_hat_sinatra'
   end
 
   # Types of supported assets; currently <code>[:css, :js]</code>.
