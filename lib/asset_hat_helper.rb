@@ -157,7 +157,12 @@ module AssetHatHelper
   #   include_css 'reset', 'application', :only_url => true
   #   => ['/stylesheets/reset.css', '/stylesheets/application.css']
   def include_css(*args)
-    return if args.blank?
+    return if args.blank? 
+    if self.respond_to?(:settings)   
+      if settings.respond_to?(:assethat)
+        AssetHat.settings = settings.send(:assethat) if AssetHat.settings.empty? 
+      end   
+		end
 
     AssetHat.html_cache       ||= {}
     AssetHat.html_cache[:css] ||= {}
@@ -293,7 +298,12 @@ module AssetHatHelper
   #   });
   #   </script>
   def include_js(*args)
-    return if args.blank?
+    return if args.blank?   
+    if self.respond_to?(:settings)   
+      if settings.respond_to?(:assethat)
+        AssetHat.settings = settings.send(:assethat) if AssetHat.settings.empty? 
+      end   
+		end
 
     AssetHat.html_cache       ||= {}
     AssetHat.html_cache[:js]  ||= {}
@@ -365,13 +375,15 @@ module AssetHatHelper
   # Returns the public URL path to the given source file.
   #
   # <code>type</code> argument: <code>:css</code> or <code>:js</code>
-  def asset_path(type, source)
-    case type.to_sym
-    when :css ; stylesheet_path(source)
-    when :js  ; javascript_path(source)
-    else
-      raise %{Unknown type "#{type}"; should be one of: #{TYPES.join(', ')}.}
-    end
+  if !defined?(Padrino)
+    def asset_path(type, source)   
+      case type.to_sym
+      when :css ; stylesheet_path(source)
+      when :js  ; javascript_path(source)
+      else
+        raise %{Unknown type "#{type}"; should be one of: #{TYPES.join(', ')}.}
+      end    
+    end 
   end
 
 end

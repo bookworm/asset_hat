@@ -43,7 +43,10 @@ module AssetHat
   RELATIVE_CONFIG_FILEPATH = File.join('config', 'assets.yml')
 
   # Absolute path for the config file.
-  CONFIG_FILEPATH = File.join(RAILS_ROOT, RELATIVE_CONFIG_FILEPATH)
+  CONFIG_FILEPATH = File.join(RAILS_ROOT, RELATIVE_CONFIG_FILEPATH)   
+   
+  # Settings
+  @settings = {:cache => true }
 
   class << self
     attr_accessor :config, :asset_exists, :html_cache #:nodoc:
@@ -60,6 +63,14 @@ module AssetHat
       @config = YAML.load(ERB.new(File.read(CONFIG_FILEPATH)).result)
     end
     @config
+  end  
+  
+  def self.settings
+    @settings 
+  end 
+  
+  def self.settings=(settings) 
+    @settings = settings
   end
 
   # Returns the relative path to the directory where the original CSS or JS
@@ -181,7 +192,16 @@ module AssetHat
   # this value, set
   # <code>config.action_controller.perform_caching</code> (boolean)
   # in your environment.
-  def self.cache? ; ActionController::Base.perform_caching ; end
+  def self.cache?() 
+    if defined?(Rails) 
+      ActionController::Base.perform_caching 
+    elsif defined?(Padrino) && Padrino.env == :development    
+      puts 'here?'
+      false 
+    else    
+      self.settings[:cache]
+    end
+  end
 
   # Returns the value of
   # <code>Rails.application.config.consider_all_requests_local</code> or its
@@ -190,10 +210,14 @@ module AssetHat
   # environment.
   def self.consider_all_requests_local?
     if defined?(Rails) && Rails.respond_to?(:application)
-      Rails.application.config.consider_all_requests_local
-    else # Rails 2.x
-      ActionController::Base.consider_all_requests_local
-    end
+      return Rails.application.config.consider_all_requests_local
+    elsif defined?(ActionController)
+      return ActionController::Base.consider_all_requests_local  
+    elsif defined?(Padrino)
+      true if Padrino.env == :development   
+    elsif self.settings[:environment]
+      true if self.settings[:environment] == :development
+    end 
   end
 
   # Returns the expected path for the minified version of an asset:
