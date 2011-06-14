@@ -168,8 +168,13 @@ module AssetHatHelper
     AssetHat.html_cache[:css] ||= {}
 
     options = args.extract_options!
-    options.symbolize_keys!.reverse_merge!(
-      :media => 'screen,projection', :ssl => controller.request.ssl?)
+    if defined?(Rails)
+      options.symbolize_keys!.reverse_merge!(
+        :media => 'screen,projection', :ssl => controller.request.ssl?)    
+    else 
+      options.symbolize_keys!.reverse_merge!(
+        :media => 'screen,projection', :ssl => false)
+    end
     cache_key = (args + [options]).inspect
 
     if !AssetHat.cache? || AssetHat.html_cache[:css][cache_key].blank?
@@ -309,7 +314,11 @@ module AssetHatHelper
     AssetHat.html_cache[:js]  ||= {}
 
     options = args.extract_options!
-    options.symbolize_keys!.reverse_merge!(:ssl => controller.request.ssl?)
+    if defined?(Rails) 
+      options.symbolize_keys!.reverse_merge!(:ssl => controller.request.ssl?)
+    else
+      options.symbolize_keys!.reverse_merge!(:ssl => false)
+    end
     cache_key = (args + [options]).inspect
 
     if !AssetHat.cache? || AssetHat.html_cache[:js][cache_key].blank?
