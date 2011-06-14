@@ -2,7 +2,12 @@ require 'sinatra/base'
 module AssetHat
   module Sinatra 
   	module Helpers
-  	  include AssetHatHelper                 
+  	  include AssetHatHelper   
+  	  def self.registered(app)    
+  			if app
+    	    app.helpers AssetHat::Sinatra::Helpers
+  			end
+      end              
     end
   end 
 end       
