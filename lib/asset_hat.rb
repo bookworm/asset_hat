@@ -196,7 +196,6 @@ module AssetHat
     if defined?(Rails) 
       ActionController::Base.perform_caching 
     elsif defined?(Padrino) && Padrino.env == :development    
-      puts 'here?'
       false 
     else    
       self.settings[:cache]
