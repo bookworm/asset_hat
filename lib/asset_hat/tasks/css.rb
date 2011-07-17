@@ -28,8 +28,8 @@ namespace :asset_hat do
 
       if defined?(Rails) 
         asset_host = ActionController::Base.asset_host    
-      elsif defined?(Padrino)  
-        asset_host = Padrino.apps_configuration.asset_host
+      else
+        asset_host = AssetHat.config[:asset_host]
       end
       
       if asset_host.blank?
@@ -105,8 +105,8 @@ namespace :asset_hat do
       # Check whether app has special SSL asset host
       if defined?(Rails) 
         asset_host = ActionController::Base.asset_host    
-      elsif defined?(Padrino)  
-        asset_host = Padrino.apps_configuration.asset_host
+      else
+        asset_host = AssetHat.config[:asset_host]
       end
     
       output_options_array = [{:ssl => false}]

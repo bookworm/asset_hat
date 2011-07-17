@@ -316,8 +316,8 @@ module AssetHat
   def self.ssl_asset_host_differs?
     if defined?(Rails) 
       asset_host = ActionController::Base.asset_host    
-    elsif defined?(Padrino)  
-      asset_host = Padrino.apps_configuration.asset_host
+    else
+      asset_host = AssetHat.config[:asset_host]
     end    
     AssetHat.compute_asset_host(asset_host, 'x.png') !=
       AssetHat.compute_asset_host(asset_host, 'x.png', :ssl => true)
