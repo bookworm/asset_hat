@@ -314,7 +314,11 @@ module AssetHat
   # Returns <code>true</code> if the asset host differs between SSL and
   # non-SSL pages, or <code>false</code> if the asset host doesn't change.
   def self.ssl_asset_host_differs?
-    asset_host = ActionController::Base.asset_host
+    if defined?(Rails) 
+      asset_host = ActionController::Base.asset_host    
+    elsif defined?(Padrino)  
+      asset_host = Padrino.apps_configuration.asset_host
+    end    
     AssetHat.compute_asset_host(asset_host, 'x.png') !=
       AssetHat.compute_asset_host(asset_host, 'x.png', :ssl => true)
   end

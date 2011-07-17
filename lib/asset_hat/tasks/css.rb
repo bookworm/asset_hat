@@ -26,7 +26,12 @@ namespace :asset_hat do
 
       verbose = (ENV['VERBOSE'] != 'false') # Defaults to `true`
 
-      asset_host = ActionController::Base.asset_host
+      if defined?(Rails) 
+        asset_host = ActionController::Base.asset_host    
+      elsif defined?(Padrino)  
+        asset_host = Padrino.apps_configuration.asset_host
+      end
+      
       if asset_host.blank?
         raise "This environment (#{ENV['RAILS_ENV']}) " +
           "doesn't have an `asset_host` configured." and return
@@ -98,7 +103,12 @@ namespace :asset_hat do
       end
 
       # Check whether app has special SSL asset host
-      asset_host = ActionController::Base.asset_host
+      if defined?(Rails) 
+        asset_host = ActionController::Base.asset_host    
+      elsif defined?(Padrino)  
+        asset_host = Padrino.apps_configuration.asset_host
+      end
+    
       output_options_array = [{:ssl => false}]
       if AssetHat.ssl_asset_host_differs?
         # The bundle needs a second version, which uses the asset host via SSL
