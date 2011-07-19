@@ -7,10 +7,14 @@ module AssetHat
   if defined?(Rails) && Rails::VERSION::MAJOR >= 3
     RAILS_ROOT = Rails.root || '.' #:nodoc:
     require 'asset_hat/railtie'
-  else
+  elsif defined?(Rails)
     RAILS_ROOT = File.join(File.dirname(__FILE__), '..') unless
       defined?(RAILS_ROOT) #:nodoc:
-  end   
+  elsif defined?(Padrino)  
+    RAILS_ROOT = PADRINO_ROOT
+  else
+    RAILS_ROOT = File.join(File.dirname(__FILE__), '..')  
+  end 
   
   if defined?(Sinatra)        
     require 'asset_hat_helper'  
