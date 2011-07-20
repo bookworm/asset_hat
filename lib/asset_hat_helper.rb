@@ -162,7 +162,7 @@ module AssetHatHelper
       if settings.respond_to?(:assethat)
         AssetHat.settings = settings.send(:assethat) if AssetHat.settings.empty? 
       end   
-		end
+    end
 
     AssetHat.html_cache       ||= {}
     AssetHat.html_cache[:css] ||= {}
@@ -308,7 +308,7 @@ module AssetHatHelper
       if settings.respond_to?(:assethat)
         AssetHat.settings = settings.send(:assethat) if AssetHat.settings.empty? 
       end   
-		end
+    end
 
     AssetHat.html_cache       ||= {}
     AssetHat.html_cache[:js]  ||= {}
