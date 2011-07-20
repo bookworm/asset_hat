@@ -9,5 +9,4 @@ module AssetHat
 
   # This gem's version number.
   VERSION = self.version
-
 end

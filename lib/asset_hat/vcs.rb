@@ -88,5 +88,4 @@ module AssetHat
       end
     end
   end
-
 end
